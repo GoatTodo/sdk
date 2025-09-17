@@ -1,4 +1,4 @@
-# goattodo-sdk
+# sdk
 
 This repository houses the cross platform GoatTodo SDK, written in Rust.
 
