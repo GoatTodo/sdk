@@ -1,14 +1,24 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod client;
+pub mod user;
+pub mod uuid;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+/*
+    Goat Todo SDK
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+    Potential API Brainstorming
+
+    - GoatTodoClient -
+
+    let client = GoatTodoClient.new();
+    client.login(user)
+    client.logout()
+
+    client.add_todo
+    client.get_todo
+    client.update_todo
+    client.delete_todo
+
+    - Todo -
+
+    ?
+*/
