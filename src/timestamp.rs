@@ -1,5 +1,6 @@
 use std::time::SystemTime;
 
+#[derive(Copy, Clone)]
 pub struct Timestamp {
     data: u64,
 }
@@ -9,19 +10,25 @@ impl Timestamp {
     ///
     /// Note: This uses std::time::SystemTime, which is currently not monotonic
     /// according to the docs.
-    pub fn now() -> Result<Self, &'static str> {
+    pub fn now() -> Result<Self, String> {
         if let Ok(dur) = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
             Ok(Self {
                 data: dur.as_secs(),
             })
         } else {
-            Err("Error: Couldn't create a Timestamp, the current time is before the Unix epoch.")
+            Err(String::from(
+                "Error: Couldn't create a Timestamp, the current time is before the Unix epoch.",
+            ))
         }
+    }
+
+    pub fn get_current_timestamp(&self) -> u64 {
+        self.data
     }
 }
 
 impl Default for Timestamp {
-    /// Returns a Timestamp with an internal data value of 0, representing the
+    /// Creates a Timestamp with an internal data value of 0, representing the
     /// Unix epoch: January 1, 1970 UTC.
     fn default() -> Self {
         Self {
