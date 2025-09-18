@@ -6,13 +6,21 @@ This repository houses the cross platform GoatTodo SDK, written in Rust.
 
 I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust](https://www.rust-lang.org) for educational purposes. It is not yet ready for public use.
 
-## Build
+## Development
+
+### Build
 
 `cargo build`
 
-## Test
+### Test
 
 `cargo test`
+
+### Format
+
+`cargo +nightly fmt`
+
+(You may need: `rustup component add rustfmt --toolchain nightly`)
 
 ## License
 

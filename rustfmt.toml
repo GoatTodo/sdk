@@ -1,0 +1,12 @@
+# Configure Rustfmt: https://rust-lang.github.io/rustfmt
+
+# Editions
+edition = "2024"
+style_edition = "2024"
+
+# Wrap comments
+wrap_comments = true
+
+# Sort and group imports
+group_imports = "StdExternalCrate"
+imports_granularity = "Crate"
