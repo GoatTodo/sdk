@@ -3,6 +3,7 @@ name = "goattodo-sdk"
 description = "The GoatTodo SDK"
 homepage = "http://goatodo.com"
 repository = "https://github.com/GoatTodo/sdk"
+license = "AGPL-3.0-only"
 license-file = "LICENSE"
 readme = "README.md"
 keywords = ["sdk", "todo"]
