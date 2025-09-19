@@ -2,7 +2,6 @@ mod client;
 mod timestamp;
 mod todo;
 mod user;
-mod uuid;
 
 pub fn hello_world() -> String {
     String::from("Hello world!")
