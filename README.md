@@ -6,7 +6,13 @@ This repository houses the cross platform GoatTodo SDK, written in Rust.
 
 I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust](https://www.rust-lang.org) for educational purposes. It is not yet ready for public use.
 
-## Development
+## SDK Usage
+
+This sdk is currently only published on [crates.io](https://crates.io/crates/goattodo-sdk).
+
+Because this project is not ready for public use, only a `hello_world()` function is public.
+
+## SDK Development
 
 ### Build
 
