@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use crate::uuid::Uuid;
 
 pub struct User {

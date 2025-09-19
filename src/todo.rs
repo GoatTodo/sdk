@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use crate::timestamp::Timestamp;
 
 pub struct Todo {

@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use std::time::SystemTime;
 
 #[derive(Copy, Clone)]
