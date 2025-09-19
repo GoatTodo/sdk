@@ -1,4 +1,4 @@
-# sdk
+# GoatTodo SDK
 
 This repository houses the cross platform GoatTodo SDK, written in Rust.
 
@@ -24,7 +24,7 @@ I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust
 
 ## Versioning
 
-This repository follows [semver](https://semver.org) with the exception that until major version 1.0, minor versions are considered breaking changes.
+This repository follows [semver](https://semver.org) with the exception that until major version `1.0`, minor versions are considered breaking changes.
 
 ## License
 
