@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub const FAKE_UUID: &str = "1ac54d4d-bbf3-4db2-9bc7-9e3f152e765b";
 
 pub struct Uuid {
