@@ -1,8 +1,12 @@
-pub mod client;
-pub mod timestamp;
-pub mod todo;
-pub mod user;
-pub mod uuid;
+mod client;
+mod timestamp;
+mod todo;
+mod user;
+mod uuid;
+
+pub fn hello_world() -> String {
+    String::from("Hello world!")
+}
 
 /*
     Goat Todo SDK
