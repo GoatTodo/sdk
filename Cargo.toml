@@ -1,6 +1,12 @@
 [package]
 name = "goattodo-sdk"
-version = "0.1.0"
+description = "The GoatTodo SDK"
+homepage = "http://goatodo.com"
+repository = "https://github.com/GoatTodo/sdk"
+license-file = "LICENSE"
+readme = "README.md"
+keywords = ["sdk", "todo"]
 edition = "2024"
+version = "0.1.0"
 
 [dependencies]
