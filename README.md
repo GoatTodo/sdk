@@ -24,7 +24,7 @@ I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust
 
 ## Versioning
 
-This repository follows [semver](https://semver.org) with the exception that until major version `1.0`, minor versions are considered breaking changes.
+This sdk follows [semver](https://semver.org). Anything before major version `1.0.0` is subject to breaking changes.
 
 ## License
 
