@@ -10,7 +10,7 @@ pub struct Todo {
     revisions: Vec<TodoRevision>,
 }
 
-struct TodoRevision {
+pub struct TodoRevision {
     title: Option<String>,
     description: Option<String>,
     completed: Option<bool>,
@@ -43,7 +43,7 @@ impl Todo {
             title: Some(title.clone()),
             description: description.clone(),
             completed: Some(completed),
-            due_date: due_date.clone(),
+            due_date,
             tags: tags.clone(),
             revision_date: current_timestamp,
         };
@@ -53,12 +53,121 @@ impl Todo {
         Ok(Self {
             title,
             description,
-            completed: completed,
+            completed,
             due_date,
             tags: tags.unwrap_or_default(),
             revision_date: current_timestamp,
             revisions,
         })
+    }
+
+    pub fn add_revision(&mut self, revision: TodoRevision) -> Result<(), ()> {
+        // FIXME: comparison SHOULD be >=, but timestamp is not monotonic
+        if self.revision_date.get_current_timestamp()
+            > revision.revision_date.get_current_timestamp()
+        {
+            return Err(());
+        }
+
+        let revision_title = if let Some(revision_title) = revision.title {
+            if self.title != revision_title {
+                self.title = revision_title.clone();
+                Some(revision_title)
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+
+        let revision_description = if let Some(revision_description) = revision.description {
+            if let Some(current_description) = &self.description {
+                if *current_description != revision_description {
+                    self.description = Some(revision_description.clone());
+                    Some(revision_description)
+                } else {
+                    None
+                }
+            } else {
+                self.description = Some(revision_description.clone());
+                Some(revision_description)
+            }
+        } else {
+            None
+        };
+        let revision_completed = if let Some(revision_completed) = revision.completed {
+            if self.completed != revision_completed {
+                self.completed = revision_completed;
+                Some(revision_completed)
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+
+        let revision_due_date = if let Some(revision_due_date) = revision.due_date {
+            if let Some(current_due_date) = self.due_date {
+                if current_due_date.get_current_timestamp()
+                    != revision_due_date.get_current_timestamp()
+                {
+                    self.due_date = Some(revision_due_date);
+                    Some(revision_due_date)
+                } else {
+                    None
+                }
+            } else {
+                self.due_date = Some(revision_due_date);
+                Some(revision_due_date)
+            }
+        } else {
+            None
+        };
+
+        // assume that the current tags are sorted, but the revision_tags are not
+        let revision_tags = if let Some(mut revision_tags) = revision.tags {
+            if revision_tags.is_empty() {
+                None
+            } else if self.tags.is_empty() || self.tags != revision_tags {
+                revision_tags.sort();
+                self.tags = revision_tags.clone();
+                Some(revision_tags)
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+
+        self.revisions.push(TodoRevision::new(
+            revision_title,
+            revision_description,
+            revision_completed,
+            revision_due_date,
+            revision_tags,
+            revision.revision_date,
+        ));
+        Ok(())
+    }
+}
+
+impl TodoRevision {
+    fn new(
+        title: Option<String>,
+        description: Option<String>,
+        completed: Option<bool>,
+        due_date: Option<Timestamp>,
+        tags: Option<Vec<String>>,
+        revision_date: Timestamp,
+    ) -> Self {
+        Self {
+            title,
+            description,
+            completed,
+            due_date,
+            tags,
+            revision_date,
+        }
     }
 }
 
@@ -88,12 +197,41 @@ mod tests {
         assert_eq!(title, new_todo.title);
         assert_eq!(description, new_todo.description);
         assert_eq!(completed, new_todo.completed);
-        assert_eq!(true, new_todo.due_date.is_none());
+        assert!(new_todo.due_date.is_none());
         assert_eq!(tags, new_todo.tags);
-        assert_eq!(
-            true,
-            new_todo.revision_date.get_current_timestamp() > UNIX_EPOCH
-        );
+        assert!(new_todo.revision_date.get_current_timestamp() > UNIX_EPOCH);
         assert_eq!(1, new_todo.revisions.len());
+    }
+
+    #[test]
+    fn test_new_revision_title() {
+        let now = Timestamp::now().unwrap();
+
+        let title = String::from("🦮 Walk the dog");
+        let revision_title = String::from("🦮 🦮 Walk MORE dogs");
+        let description = Some(String::from("Be sure to walk the dog before it rains!"));
+        let completed = false;
+        let due_date = None;
+        let tags = vec![String::from("my-list"), String::from("dog-related")];
+
+        let mut new_todo = Todo::new(
+            title.clone(),
+            description.clone(),
+            completed,
+            due_date,
+            Some(tags.clone()),
+        )
+        .unwrap();
+
+        let new_revision =
+            TodoRevision::new(Some(revision_title.clone()), None, None, None, None, now);
+
+        assert!(new_todo.add_revision(new_revision).is_ok());
+        assert_eq!(revision_title, new_todo.title);
+        assert_eq!(description, new_todo.description);
+        assert_eq!(completed, new_todo.completed);
+        assert!(new_todo.due_date.is_none());
+        assert_eq!(tags, new_todo.tags);
+        assert_eq!(2, new_todo.revisions.len());
     }
 }
