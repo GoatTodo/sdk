@@ -234,4 +234,36 @@ mod tests {
         assert_eq!(tags, new_todo.tags);
         assert_eq!(2, new_todo.revisions.len());
     }
+
+    #[test]
+    fn test_new_revision_description() {
+        let now = Timestamp::now().unwrap();
+
+        let title = String::from("🦮 Walk the dog");
+        let description = Some(String::from("Be sure to walk the dog before it rains!"));
+        let revision_description = Some(String::from("Walk the dog before it snows! 🌨️"));
+        let completed = false;
+        let due_date = None;
+        let tags = vec![String::from("my-list"), String::from("dog-related")];
+
+        let mut new_todo = Todo::new(
+            title.clone(),
+            description.clone(),
+            completed,
+            due_date,
+            Some(tags.clone()),
+        )
+        .unwrap();
+
+        let new_revision =
+            TodoRevision::new(None, revision_description.clone(), None, None, None, now);
+
+        assert!(new_todo.add_revision(new_revision).is_ok());
+        assert_eq!(title, new_todo.title);
+        assert_eq!(revision_description.unwrap(), new_todo.description.unwrap());
+        assert_eq!(completed, new_todo.completed);
+        assert!(new_todo.due_date.is_none());
+        assert_eq!(tags, new_todo.tags);
+        assert_eq!(2, new_todo.revisions.len());
+    }
 }
