@@ -62,9 +62,8 @@ impl Todo {
     }
 
     pub fn add_revision(&mut self, revision: TodoRevision) -> Result<(), ()> {
-        // FIXME: comparison SHOULD be >=, but timestamp is not monotonic
         if self.revision_date.get_current_timestamp()
-            > revision.revision_date.get_current_timestamp()
+            >= revision.revision_date.get_current_timestamp()
         {
             return Err(());
         }
@@ -205,8 +204,6 @@ mod tests {
 
     #[test]
     fn test_new_revision_title() {
-        let now = Timestamp::now().unwrap();
-
         let title = String::from("🦮 Walk the dog");
         let revision_title = String::from("🦮 🦮 Walk MORE dogs");
         let description = Some(String::from("Be sure to walk the dog before it rains!"));
@@ -223,6 +220,9 @@ mod tests {
         )
         .unwrap();
 
+        std::thread::sleep(std::time::Duration::from_secs(1));
+        let now = Timestamp::now().unwrap();
+
         let new_revision =
             TodoRevision::new(Some(revision_title.clone()), None, None, None, None, now);
 
@@ -237,8 +237,6 @@ mod tests {
 
     #[test]
     fn test_new_revision_description() {
-        let now = Timestamp::now().unwrap();
-
         let title = String::from("🦮 Walk the dog");
         let description = Some(String::from("Be sure to walk the dog before it rains!"));
         let revision_description = Some(String::from("Walk the dog before it snows! 🌨️"));
@@ -254,6 +252,9 @@ mod tests {
             Some(tags.clone()),
         )
         .unwrap();
+
+        std::thread::sleep(std::time::Duration::from_secs(1));
+        let now = Timestamp::now().unwrap();
 
         let new_revision =
             TodoRevision::new(None, revision_description.clone(), None, None, None, now);
