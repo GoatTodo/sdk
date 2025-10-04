@@ -8,8 +8,7 @@ pub struct Timestamp {
 impl Timestamp {
     /// Creates a Timestamp for the current system UTC time.
     ///
-    /// Note: This uses std::time::SystemTime, which is currently not monotonic
-    /// according to the docs.
+    /// Note: This uses std::time::SystemTime, which is not monotonic.
     pub fn now() -> Result<Self, String> {
         if let Ok(dur) = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
             Ok(Self {
