@@ -21,7 +21,8 @@ impl Timestamp {
         }
     }
 
-    pub fn get_current_timestamp(&self) -> u64 {
+    /// Get the unix timestamp.
+    pub fn get(&self) -> u64 {
         self.data
     }
 }

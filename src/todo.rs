@@ -67,9 +67,7 @@ impl Todo {
     }
 
     pub fn add_revision(&mut self, revision: TodoRevision) -> Result<(), ()> {
-        if self.revision_date.get_current_timestamp()
-            >= revision.revision_date.get_current_timestamp()
-        {
+        if self.revision_date.get() >= revision.revision_date.get() {
             return Err(());
         }
 
@@ -112,9 +110,7 @@ impl Todo {
 
         let revision_due_date = if let Some(revision_due_date) = revision.due_date {
             if let Some(current_due_date) = self.due_date {
-                if current_due_date.get_current_timestamp()
-                    != revision_due_date.get_current_timestamp()
-                {
+                if current_due_date.get() != revision_due_date.get() {
                     self.due_date = Some(revision_due_date);
                     Some(revision_due_date)
                 } else {
@@ -206,7 +202,7 @@ mod tests {
         assert_eq!(completed, new_todo.completed);
         assert!(new_todo.due_date.is_none());
         assert_eq!(tags, new_todo.tags);
-        assert!(new_todo.revision_date.get_current_timestamp() > UNIX_EPOCH);
+        assert!(new_todo.revision_date.get() > UNIX_EPOCH);
         assert_eq!(1, new_todo.revisions.len());
     }
 
@@ -235,7 +231,7 @@ mod tests {
         assert_eq!(completed, new_todo.completed);
         assert!(new_todo.due_date.is_none());
         assert_eq!(tags, new_todo.tags);
-        assert!(new_todo.revision_date.get_current_timestamp() > UNIX_EPOCH);
+        assert!(new_todo.revision_date.get() > UNIX_EPOCH);
         assert_eq!(1, new_todo.revisions.len());
     }
 
