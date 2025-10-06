@@ -1,4 +1,4 @@
-mod client;
+mod clients;
 mod timestamp;
 mod todo;
 mod user;
@@ -26,4 +26,12 @@ pub fn hello_world() -> String {
     - Todo -
 
     ?
+
+    The client represents the storage abstraction for todo's.
+
+    let client = Client::new(cloud | filesystem | memory | local db);
+    client.login(user);
+    client.logout(user);
+
+    User -> email & password
 */
