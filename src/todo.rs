@@ -66,6 +66,7 @@ impl Todo {
         })
     }
 
+    /// Adds a revision to a todo. This is how a user might "edit" the todo.
     pub fn add_revision(&mut self, revision: TodoRevision) -> Result<(), ()> {
         if self.revision_date.get() >= revision.revision_date.get() {
             return Err(());
