@@ -1,19 +1,25 @@
-use crate::clients::{todo::TodoClient, user::UserClient};
+use std::{cell::RefCell, rc::Rc};
 
-pub struct Client {
-    todo_client: TodoClient,
+use crate::clients::{storage::StorageClient, todo::TodoClient, user::UserClient};
+
+pub struct Client<T: StorageClient> {
+    storage_client: Rc<RefCell<T>>,
+    todo_client: TodoClient<T>,
     user_client: UserClient,
 }
 
-impl Client {
+impl<T: StorageClient> Client<T> {
     pub fn new() -> Self {
+        let storage_client: Rc<RefCell<T>> = Rc::new(RefCell::new(T::new()));
+
         Self {
-            todo_client: TodoClient::new(),
+            storage_client: Rc::clone(&storage_client),
+            todo_client: TodoClient::new(Rc::clone(&storage_client)),
             user_client: UserClient::new(),
         }
     }
 
-    pub fn todos(&mut self) -> &mut TodoClient {
+    pub fn todos(&mut self) -> &mut TodoClient<T> {
         &mut self.todo_client
     }
 }
@@ -21,15 +27,23 @@ impl Client {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{clients::storage::memory::MemoryStorageClient, timestamp::Timestamp, todo::Todo};
 
     #[test]
     fn test() {
-        let mut c = Client::new();
+        let mut c = Client::<MemoryStorageClient>::new();
 
-        c.todos().add();
-        assert_eq!(String::from("a"), c.todos().get());
+        // TODO: make timestamp not optional so new always works
+        let t = Todo::new(
+            String::from("Todo Title"),
+            Some(String::from("Todo Description")),
+            false,
+            None,
+            None,
+            None,
+        );
 
-        c.todos().add();
-        assert_eq!(String::from("aa"), c.todos().get());
+        let r = c.todos().add(t.expect("timestamp should be valid"));
+        assert_eq!(Ok(()), r);
     }
 }

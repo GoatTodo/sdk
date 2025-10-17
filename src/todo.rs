@@ -1,5 +1,6 @@
 use crate::timestamp::Timestamp;
 
+#[derive(Clone)]
 pub struct Todo {
     title: String,
     description: Option<String>,
@@ -10,6 +11,7 @@ pub struct Todo {
     revisions: Vec<TodoRevision>,
 }
 
+#[derive(Clone)]
 pub struct TodoRevision {
     title: Option<String>,
     description: Option<String>,
