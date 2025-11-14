@@ -59,7 +59,8 @@ mod tests {
             Some(String::from("John")),
             String::from("john@example.com"),
             String::from("correct_horse_battery_staple"),
-        );
+        )
+        .expect("user created successfully");
 
         let u = c.users().create(user);
 

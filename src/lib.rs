@@ -1,4 +1,5 @@
 mod clients;
+mod custom_error;
 mod timestamp;
 mod todo;
 mod user;
