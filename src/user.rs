@@ -42,9 +42,10 @@ impl User {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::constants;
 
     #[test]
-    fn test_new_normal_success() {
+    fn test_new_success() {
         let name = Some(String::from("Joe"));
         let email = String::from("joe@example.com");
         let password = String::from("password123");
@@ -121,5 +122,20 @@ mod tests {
         let user = User::new(name.clone(), email.clone(), password.clone());
 
         assert_eq!(CustomError::UserPasswordIsEmpty, user.unwrap_err());
+    }
+
+    #[test]
+    fn test_id_success() {
+        let name = Some(String::from("Joe"));
+        let email = String::from("joe@example.com");
+        let password = String::from("password123");
+
+        let user =
+            User::new(name.clone(), email.clone(), password.clone()).expect("valid user created");
+
+        assert_eq!(constants::UUID_STRING_LENGTH, user.id().to_string().len());
+        assert_eq!(name, user.name);
+        assert_eq!(email, user.email);
+        assert_eq!(password, user.password);
     }
 }
