@@ -1,4 +1,4 @@
-use crate::todo::Todo;
+use crate::{todo::Todo, user::User};
 
 pub mod memory;
 
@@ -26,6 +26,10 @@ pub trait StorageClient {
     fn todo_list(&self) -> Result<Vec<Todo>, ()>;
     /// Delete all todo data
     fn todo_dump(&mut self) -> Result<(), ()>;
+    /// Create a user.
+    fn user_create(&mut self, user: User) -> Result<(), ()>;
+    // Create a user.
+    //fn user_login(&mut self) -> Result<(), ()>;
     //TODO: fn todo_update(&mut self, todo: Todo) -> Result<(), ()>;
     //TODO: fn todo_delete(&mut self, todo: Todo) -> Result<(), ()>;
     // TODO: handle the drop stuff

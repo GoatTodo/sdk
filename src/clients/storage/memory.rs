@@ -1,12 +1,16 @@
-use crate::{clients::storage::StorageClient, todo::Todo};
+use crate::{clients::storage::StorageClient, todo::Todo, user::User};
 
 pub struct MemoryStorageClient {
     todos: Vec<Todo>,
+    users: Vec<User>,
 }
 
 impl StorageClient for MemoryStorageClient {
     fn new() -> Self {
-        Self { todos: Vec::new() }
+        Self {
+            todos: Vec::new(),
+            users: Vec::new(),
+        }
     }
 
     fn todo_create(&mut self, todo: Todo) -> Result<(), ()> {
@@ -21,6 +25,12 @@ impl StorageClient for MemoryStorageClient {
 
     fn todo_dump(&mut self) -> Result<(), ()> {
         self.todos = Vec::new();
+
+        Ok(())
+    }
+
+    fn user_create(&mut self, user: User) -> Result<(), ()> {
+        self.users.push(user);
 
         Ok(())
     }
