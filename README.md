@@ -4,7 +4,13 @@ This repository houses the cross platform GoatTodo SDK, written in Rust.
 
 ## Project Goals
 
-I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust](https://www.rust-lang.org) for educational purposes. It is not yet ready for public use.
+🚨 This is not yet ready for public use 🚨
+
+I'm ([coltonhurst](https://github.com/coltonhurst)) building a Todo SDK in [Rust](https://www.rust-lang.org) for educational purposes.
+
+Current project goals:
+- Create an ergonomic SDK for todo apps
+- Write the entire SDK by hand in pure Rust, using zero dependencies except for crypto related dependencies (currently only: `uuid`)
 
 ## SDK Usage
 
