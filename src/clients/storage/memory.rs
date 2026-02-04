@@ -38,4 +38,8 @@ impl StorageClient for MemoryStorageClient {
 
         Ok(())
     }
+
+    fn user_len(&self) -> usize {
+        self.users.len()
+    }
 }

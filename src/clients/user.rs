@@ -38,4 +38,12 @@ impl<T: StorageClient> UserClient<T> {
     pub fn logout(&mut self) {
         self.current_user_email = None;
     }
+
+    pub fn len(&self) -> Result<usize, ()> {
+        let Ok(mut sc) = self.storage_client.try_borrow_mut() else {
+            return Err(());
+        };
+
+        Ok(sc.user_len())
+    }
 }

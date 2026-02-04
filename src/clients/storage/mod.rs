@@ -35,4 +35,7 @@ pub trait StorageClient {
     //TODO: fn todo_update(&mut self, todo: Todo) -> Result<(), ()>;
     //TODO: fn todo_delete(&mut self, todo: Todo) -> Result<(), ()>;
     // TODO: handle the drop stuff
+
+    /// List the total number of users
+    fn user_len(&self) -> usize;
 }
