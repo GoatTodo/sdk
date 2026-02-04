@@ -1,5 +1,7 @@
 use std::{cell::RefCell, rc::Rc};
 
+use uuid::Uuid;
+
 use crate::{clients::storage::StorageClient, user::User};
 
 pub struct UserClient<T: StorageClient> {
@@ -21,6 +23,14 @@ impl<T: StorageClient> UserClient<T> {
         };
 
         sc.user_create(user)
+    }
+
+    pub fn delete(&mut self, user_id: Uuid) -> Result<(), ()> {
+        let Ok(mut sc) = self.storage_client.try_borrow_mut() else {
+            return Err(());
+        };
+
+        sc.user_delete(user_id)
     }
 
     pub fn login(&mut self, email: String, _password: String) -> Result<(), String> {

@@ -1,3 +1,5 @@
+use uuid::Uuid;
+
 use crate::{clients::storage::StorageClient, todo::Todo, user::User};
 
 pub struct MemoryStorageClient {
@@ -37,6 +39,16 @@ impl StorageClient for MemoryStorageClient {
         self.users.push(user);
 
         Ok(())
+    }
+
+    fn user_delete(&mut self, user_id: Uuid) -> Result<(), ()> {
+        match self.users.iter().position(|user| user.id() == user_id) {
+            Some(user_index) => {
+                self.users.swap_remove(user_index);
+                Ok(())
+            }
+            None => Err(()),
+        }
     }
 
     fn user_len(&self) -> usize {
