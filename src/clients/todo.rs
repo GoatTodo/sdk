@@ -18,4 +18,12 @@ impl<T: StorageClient> TodoClient<T> {
 
         sc.todo_create(todo)
     }
+
+    pub fn len(&self) -> Result<usize, ()> {
+        let Ok(mut sc) = self.storage_client.try_borrow_mut() else {
+            return Err(());
+        };
+
+        Ok(sc.todo_len())
+    }
 }

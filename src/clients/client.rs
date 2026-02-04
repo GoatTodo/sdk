@@ -34,11 +34,12 @@ mod tests {
     use crate::{clients::storage::memory::MemoryStorageClient, todo::Todo, user::User};
 
     #[test]
-    fn test() {
+    fn create_todo_success() {
+        // Create the client
         let mut c = Client::<MemoryStorageClient>::new();
 
-        // TODO: make timestamp not optional so new always works
-        let t = Todo::new(
+        // Create the todo
+        let todo = Todo::new(
             String::from("Todo Title"),
             Some(String::from("Todo Description")),
             false,
@@ -46,9 +47,18 @@ mod tests {
             None,
             None,
         );
+        let todo = todo.expect("timestamp should be valid");
 
-        let r = c.todos().add(t.expect("timestamp should be valid"));
-        assert_eq!(Ok(()), r);
+        // Add the todo
+        let result = c.todos().add(todo);
+
+        // Verify
+        const EXPECTED_TODO_COUNT: usize = 1;
+        assert_eq!(Ok(()), result);
+        assert_eq!(
+            EXPECTED_TODO_COUNT,
+            c.todos().len().expect("no internal errors")
+        );
     }
 
     #[test]

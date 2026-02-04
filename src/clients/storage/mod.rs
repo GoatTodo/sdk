@@ -24,6 +24,8 @@ pub trait StorageClient {
     fn todo_create(&mut self, todo: Todo) -> Result<(), ()>;
     /// Get a list of all todos
     fn todo_list(&self) -> Result<Vec<Todo>, ()>;
+    /// List the total number of todos
+    fn todo_len(&self) -> usize;
     /// Delete all todo data
     fn todo_dump(&mut self) -> Result<(), ()>;
     /// Create a user.

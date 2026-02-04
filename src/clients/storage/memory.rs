@@ -23,6 +23,10 @@ impl StorageClient for MemoryStorageClient {
         Ok(self.todos.clone())
     }
 
+    fn todo_len(&self) -> usize {
+        self.todos.len()
+    }
+
     fn todo_dump(&mut self) -> Result<(), ()> {
         self.todos = Vec::new();
 
