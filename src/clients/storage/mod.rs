@@ -1,3 +1,5 @@
+use uuid::Uuid;
+
 use crate::{todo::Todo, user::User};
 
 pub mod memory;
@@ -30,8 +32,10 @@ pub trait StorageClient {
     fn todo_dump(&mut self) -> Result<(), ()>;
     /// Create a user.
     fn user_create(&mut self, user: User) -> Result<(), ()>;
+    /// Delete a user.
+    fn user_delete(&mut self, user_id: Uuid) -> Result<(), ()>;
     // Create a user.
-    //fn user_login(&mut self) -> Result<(), ()>;
+    // fn user_login(&mut self) -> Result<(), ()>;
     //TODO: fn todo_update(&mut self, todo: Todo) -> Result<(), ()>;
     //TODO: fn todo_delete(&mut self, todo: Todo) -> Result<(), ()>;
     // TODO: handle the drop stuff

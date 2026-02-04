@@ -76,4 +76,34 @@ mod tests {
 
         assert!(u.is_ok());
     }
+
+    #[test]
+    fn delete_user_success() {
+        // Create the client
+        let mut c = Client::<MemoryStorageClient>::new();
+
+        // Create the user
+        let user = User::new(
+            Some(String::from("John")),
+            String::from("john@example.com"),
+            String::from("correct_horse_battery_staple"),
+        )
+        .expect("user created successfully");
+
+        // Add the user
+        let user_id = user.id();
+        let _user_creation_result = c.users().create(user);
+
+        // Delete the user
+        let deletion_result = c.users().delete(user_id);
+
+        // Verify
+        const EXPECTED_USER_COUNT: usize = 0;
+        assert_eq!(Ok(()), deletion_result);
+
+        assert_eq!(
+            EXPECTED_USER_COUNT,
+            c.users().len().expect("no internal errors")
+        );
+    }
 }
