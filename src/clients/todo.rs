@@ -1,14 +1,21 @@
 use std::{cell::RefCell, rc::Rc};
 
-use crate::{clients::storage::StorageClient, todo::Todo};
+use crate::{
+    clients::{auth_state::AuthState, storage::StorageClient},
+    todo::Todo,
+};
 
 pub struct TodoClient<T: StorageClient> {
     storage_client: Rc<RefCell<T>>,
+    auth_state: Rc<RefCell<AuthState>>,
 }
 
 impl<T: StorageClient> TodoClient<T> {
-    pub fn new(storage_client: Rc<RefCell<T>>) -> Self {
-        Self { storage_client }
+    pub fn new(storage_client: Rc<RefCell<T>>, auth_state: Rc<RefCell<AuthState>>) -> Self {
+        Self {
+            storage_client,
+            auth_state,
+        }
     }
 
     pub fn add(&mut self, todo: Todo) -> Result<(), ()> {
