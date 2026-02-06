@@ -54,4 +54,18 @@ impl StorageClient for MemoryStorageClient {
     fn user_len(&self) -> usize {
         self.users.len()
     }
+
+    fn user_login(&mut self, email: String, password: String) -> Result<User, ()> {
+        let mut users: Vec<&User> = self
+            .users
+            .iter()
+            .filter(|u| u.email == email && u.password == password)
+            .collect();
+
+        if let Some(user) = users.pop() {
+            Ok(user.clone())
+        } else {
+            Err(())
+        }
+    }
 }

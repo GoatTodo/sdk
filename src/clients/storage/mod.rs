@@ -30,12 +30,13 @@ pub trait StorageClient {
     fn todo_len(&self) -> usize;
     /// Delete all todo data
     fn todo_dump(&mut self) -> Result<(), ()>;
+
     /// Create a user.
     fn user_create(&mut self, user: User) -> Result<(), ()>;
     /// Delete a user.
     fn user_delete(&mut self, user_id: Uuid) -> Result<(), ()>;
-    // Create a user.
-    // fn user_login(&mut self) -> Result<(), ()>;
+    /// Log a user in.
+    fn user_login(&mut self, email: String, password: String) -> Result<User, ()>;
     //TODO: fn todo_update(&mut self, todo: Todo) -> Result<(), ()>;
     //TODO: fn todo_delete(&mut self, todo: Todo) -> Result<(), ()>;
     // TODO: handle the drop stuff

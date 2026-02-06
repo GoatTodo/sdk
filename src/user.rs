@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::custom_error::{CustomError, Result};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct User {
     uuid: Uuid,
     pub name: Option<String>,

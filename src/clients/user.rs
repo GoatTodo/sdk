@@ -2,18 +2,21 @@ use std::{cell::RefCell, rc::Rc};
 
 use uuid::Uuid;
 
-use crate::{clients::storage::StorageClient, user::User};
+use crate::{
+    clients::{auth_state::AuthState, storage::StorageClient},
+    user::User,
+};
 
 pub struct UserClient<T: StorageClient> {
     storage_client: Rc<RefCell<T>>,
-    current_user_email: Option<String>,
+    auth_state: Rc<RefCell<AuthState>>,
 }
 
 impl<T: StorageClient> UserClient<T> {
-    pub fn new(storage_client: Rc<RefCell<T>>) -> Self {
+    pub fn new(storage_client: Rc<RefCell<T>>, auth_state: Rc<RefCell<AuthState>>) -> Self {
         Self {
             storage_client,
-            current_user_email: None,
+            auth_state,
         }
     }
 
@@ -33,20 +36,24 @@ impl<T: StorageClient> UserClient<T> {
         sc.user_delete(user_id)
     }
 
-    pub fn login(&mut self, email: String, _password: String) -> Result<(), String> {
-        if self.current_user_email.is_some() {
-            return Err(String::from("A user is already logged in."));
+    pub fn login(&mut self, email: String, password: String) -> Result<User, ()> {
+        let Ok(mut sc) = self.storage_client.try_borrow_mut() else {
+            return Err(());
+        };
+        let Ok(mut auth_state) = self.auth_state.try_borrow_mut() else {
+            return Err(());
+        };
+
+        if let Ok(user) = sc.user_login(email, password) {
+            auth_state.logged_in_user_id = Some(user.id());
+            Ok(user)
+        } else {
+            Err(())
         }
-
-        self.current_user_email = Some(email);
-
-        // TODO: check the storage client to see if the password hash matches correctly
-
-        Ok(())
     }
 
     pub fn logout(&mut self) {
-        self.current_user_email = None;
+        // TODO: implement me with the auth_client
     }
 
     pub fn len(&self) -> Result<usize, ()> {

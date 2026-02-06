@@ -1,21 +1,31 @@
 use std::{cell::RefCell, rc::Rc};
 
-use crate::clients::{storage::StorageClient, todo::TodoClient, user::UserClient};
+use crate::clients::{
+    auth_state::AuthState, storage::StorageClient, todo::TodoClient, user::UserClient,
+};
 
 pub struct Client<T: StorageClient> {
-    storage_client: Rc<RefCell<T>>,
+    // Internally owned sub-clients
     todo_client: TodoClient<T>,
     user_client: UserClient<T>,
+
+    // Internal client shared among the sub-clients
+    storage_client: Rc<RefCell<T>>,
+
+    // Internal state shared among the sub-clients
+    auth_state: Rc<RefCell<AuthState>>,
 }
 
 impl<T: StorageClient> Client<T> {
     pub fn new() -> Self {
+        let auth_state: Rc<RefCell<AuthState>> = Rc::new(RefCell::new(AuthState::new()));
         let storage_client: Rc<RefCell<T>> = Rc::new(RefCell::new(T::new()));
 
         Self {
+            todo_client: TodoClient::new(Rc::clone(&storage_client), Rc::clone(&auth_state)),
+            user_client: UserClient::new(Rc::clone(&storage_client), Rc::clone(&auth_state)),
             storage_client: Rc::clone(&storage_client),
-            todo_client: TodoClient::new(Rc::clone(&storage_client)),
-            user_client: UserClient::new(Rc::clone(&storage_client)),
+            auth_state: Rc::clone(&auth_state),
         }
     }
 
@@ -105,5 +115,31 @@ mod tests {
             EXPECTED_USER_COUNT,
             c.users().len().expect("no internal errors")
         );
+    }
+
+    #[test]
+    fn login_user_success() {
+        // Create the client
+        let mut c = Client::<MemoryStorageClient>::new();
+
+        // Create the user
+        let user_name = String::from("John)");
+        let user_email = String::from("john@example.com");
+        let user_password = String::from("correct_horse_battery_staple");
+        let user = User::new(Some(user_name), user_email.clone(), user_password.clone())
+            .expect("user created successfully");
+
+        // Add the user to the client
+        let _ = c.users().create(user.clone());
+
+        // Log in the user
+        let logged_in_user = c
+            .users()
+            .login(user_email, user_password)
+            .expect("user logged in");
+
+        // Verify
+        assert!(c.auth_state.borrow().logged_in_user_id.is_some());
+        assert_eq!(user.id(), logged_in_user.id());
     }
 }
