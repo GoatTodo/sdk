@@ -34,6 +34,11 @@ Because this project is not ready for public use, only a `hello_world()` functio
 
 (You may need: `rustup component add rustfmt --toolchain nightly`)
 
+### Todo List
+
+- Accept refs for username email and password on create
+- Refactor user login so passwords aren't stored (it's done the bad way currently)
+
 ## Versioning
 
 This sdk follows [semver](https://semver.org). Anything before major version `1.0.0` is subject to breaking changes.
