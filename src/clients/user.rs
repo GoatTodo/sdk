@@ -36,21 +36,20 @@ impl<T: StorageClient> UserClient<T> {
         sc.user_delete(user_id)
     }
 
-    pub fn login(&mut self, email: String, _password: String) {
+    pub fn login(&mut self, email: String, password: String) -> Result<User, ()> {
+        let Ok(mut sc) = self.storage_client.try_borrow_mut() else {
+            return Err(());
+        };
+        let Ok(mut auth_state) = self.auth_state.try_borrow_mut() else {
+            return Err(());
+        };
 
-        // TODO: implement me with the auth_client
-
-        /*
-        if self.current_user_email.is_some() {
-            return Err(String::from("A user is already logged in."));
+        if let Ok(user) = sc.user_login(email, password) {
+            auth_state.logged_in_user_id = Some(user.id());
+            Ok(user)
+        } else {
+            Err(())
         }
-
-        self.current_user_email = Some(email);
-
-        // TODO: check the storage client to see if the password hash matches correctly
-
-        Ok(())
-        */
     }
 
     pub fn logout(&mut self) {
